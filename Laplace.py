@@ -16,22 +16,17 @@ def nastav_rovnici_i(i):
     """
         Nastavi koeficienty pro i-tou rovnici
     """
-    A[i,i]=-2.0*(1.0/dx**2+1.0/dy**2)
-    if (i>0):
-        A[i,i-1]=1.0/dx**2
-    if (i>Nd):
-        A[i,i-Nd]=1.0/dx**2
-    if (i<N-1):
-        A[i,i+1]=1.0/dy**2
-    if (i<N-Nd):
-        A[i,i+Nd]=1.0/dy**2
+    A[i,i]=-4.0
+    A[i,i-1]=1.0
+    A[i,i-Nd]=1.0
+    A[i,i+1]=1.0
+    A[i,i+Nd]=1.0
 
 def nastav_dirichlet_i(i,Phi_i):
     """
         Nastavi radek v i-te rovnici na Dirichletovu okrajovou podminku
     """
     A[i,:]=0.0  # vynuluj koeficienty
-    A[i,i]=1.0  # nastav koeficient na diagonale
     B[i]=Phi_i  # nastav pozadovany potencial do prave strany
 
 
@@ -39,22 +34,21 @@ def nastav_okrajovou_podminku(ix,iy):
     """
         Nastavi hodnotu okrajove podminky pro bod ix,iy
     """
-    i=(iy)*Nd+ix  # z indexu ix, iy urci poradove cislo bodu
     if (ix==0):
         # leva hranice
-        nastav_dirichlet_i(i,0.0)
+        nastav_dirichlet_i(ix,0.0)
         return
     if (ix==Nd-1):
         # prava hranice
-        nastav_dirichlet_i(i,1.0)
+        nastav_dirichlet_i(ix,1.0)
         return
     if (iy==0):
         # dolni hranice
-        nastav_dirichlet_i(i,0.0)
+        nastav_dirichlet_i(iy,0.0)
         return
     if (iy==Nd-1):
         # horni hranice
-        nastav_dirichlet_i(i,1.0)
+        nastav_dirichlet_i(iy,1.0)
         return
     
 
@@ -76,13 +70,10 @@ for iy in range(0,Nd,Nd-1):
 # vyres soustavu rovnic
 Phi=np.linalg.solve(A,B)  
 
-# potrebujeme preformatovat Phi z vektoru do matice NdxNd
-Phi_xy=Phi.reshape([Nd,Nd])
-
 
 # vykresleni reseni
 plt.figure(figsize=(6, 6))
-plt.imshow(Phi_xy, aspect='auto', cmap='rainbow')
+plt.imshow(Phi, aspect='auto', cmap='rainbow')
 plt.colorbar()
 plt.title('Potencial')
 plt.show()
@@ -91,11 +82,10 @@ plt.show()
 
 x = np.arange(0, d+dx/2, dx)  # hodnoty x souradnic sitovych bodu
 y = np.arange(0, d+dy/2, dy)
-X, Y = np.meshgrid(x, y)  # souradnice X a Y vsech bodu
 
 fig = plt.figure()
 ax = fig.add_subplot(111, projection = '3d')
-surface=ax.plot_surface(X, Y, Phi_xy,cmap='viridis')
+surface=ax.plot_surface(x, y, Phi,cmap='viridis')
 fig.colorbar(surface, ax=ax, shrink=0.5, aspect=5)
 ax.set_xlabel('x [m]')
 ax.set_ylabel('y [m]')
