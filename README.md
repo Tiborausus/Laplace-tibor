@@ -1,0 +1,1 @@
+Reseni Laplaceovy rovnice
