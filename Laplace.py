@@ -1,3 +1,4 @@
+# RANDOM COMMENT 
 # Laplaceova rovnice - reseni
 import numpy as np
 import matplotlib.pyplot as plt
@@ -51,7 +52,6 @@ def nastav_okrajovou_podminku(ix,iy):
         nastav_dirichlet_i(iy,1.0)
         return
     
-
 
 # nastav koeficienty v matici A
 for i in range(N):
