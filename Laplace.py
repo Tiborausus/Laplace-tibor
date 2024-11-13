@@ -17,11 +17,18 @@ def nastav_rovnici_i(i):
     """
         Nastavi koeficienty pro i-tou rovnici
     """
+    if (i < Nd+1 or i >= N-Nd):
+        A[i,i] = 1
+        return
+    
     A[i,i]=-4.0
-    A[i,i-1]=1.0
-    A[i,i-Nd]=1.0
-    A[i,i+1]=1.0
-    A[i,i+Nd]=1.0
+    if (i+Nd < N ):
+        A[i,i-1]=1.0
+        A[i,i+1]=1.0
+    if (i >= Nd+1):
+        A[i,i-Nd]=1.0
+    if (i+Nd < N and i > Nd+1):
+        A[i,i+Nd]=1.0
 
 def nastav_dirichlet_i(i,Phi_i):
     """
